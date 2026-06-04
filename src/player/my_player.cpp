@@ -13,6 +13,7 @@ void MyPlayer::set_sign(Sign sign) {
     m_sign = sign;
 }
 
+// ==================== count_in_direction ====================
 int count_in_direction(const State& state, int x, int y, int dx, int dy, Sign sign) {
     int count = 1;
     int cols = state.get_opts().cols;
@@ -37,6 +38,7 @@ int count_in_direction(const State& state, int x, int y, int dx, int dy, Sign si
     return count;
 }
 
+// ==================== score_for_count ====================
 int score_for_count(int count) {
     if (count >= 5) return 1000000;
     if (count == 4) return 100000;
@@ -45,6 +47,7 @@ int score_for_count(int count) {
     return 1;
 }
 
+// ==================== evaluate_cell ====================
 int evaluate_cell(const State& state, int x, int y, Sign sign) {
     int total = 0;
     int dirs[4][2] = {{1, 0}, {0, 1}, {1, 1}, {1, -1}};
@@ -56,6 +59,7 @@ int evaluate_cell(const State& state, int x, int y, Sign sign) {
     return total;
 }
 
+// ==================== is_winning_move ====================
 bool is_winning_move(const State& state, int x, int y, Sign sign) {
     int dirs[4][2] = {{1,0}, {0,1}, {1,1}, {1,-1}};
     int cols = state.get_opts().cols;
@@ -85,6 +89,7 @@ bool is_winning_move(const State& state, int x, int y, Sign sign) {
     return false;
 }
 
+// ==================== make_move ====================
 Point MyPlayer::make_move(const State& state) {
     Point best_move = {0, 0};
     int best_score = INT_MIN;
@@ -92,7 +97,7 @@ Point MyPlayer::make_move(const State& state) {
     int rows = state.get_opts().rows;
     Sign opponent = (m_sign == Sign::X) ? Sign::O : Sign::X;
     
-    // first priority : win immediatly
+    // first priority : win immediately
     for (int x = 0; x < cols; x++) {
         for (int y = 0; y < rows; y++) {
             if (state.get_value(x, y) == Sign::NONE) {
@@ -103,7 +108,7 @@ Point MyPlayer::make_move(const State& state) {
         }
     }
     
-    // second priority : bloc adversaire
+    // second priority : block opponent
     for (int x = 0; x < cols; x++) {
         for (int y = 0; y < rows; y++) {
             if (state.get_value(x, y) == Sign::NONE) {
@@ -136,4 +141,4 @@ Point MyPlayer::make_move(const State& state) {
     return best_move;
 }
 
-} 
+} // namespace ttt::my_player
